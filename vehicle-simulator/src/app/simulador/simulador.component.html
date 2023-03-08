@@ -15,6 +15,7 @@
             name="tipoVeiculo"
             [(ngModel)]="tipoVeiculo"
             aria-label="Default select example"
+            (change)="onChangeTipoVeiculo()"
           >
             <option
               *ngFor="let modelo of modelos"
@@ -115,7 +116,7 @@
   </form>
 
   <div class="container mt-4">
-    <ng-container *ngIf="valorVenda.length > 0">
+    <ng-container *ngIf="result && valorVenda.length > 0">
       <div class="row" style="margin-left: 10%; margin-right: 10%">
         <div class="col">
           <div class="d-flex justify-content-between">
@@ -185,6 +186,7 @@
               <h2 class="fw-bold m-0" style="font-size: 5rem">{{ RESULT }}%</h2>
             </div>
           </ng-container> -->
+
         </div>
       </div>
 

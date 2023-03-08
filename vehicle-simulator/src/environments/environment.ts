@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   api: {
-    API_URL: 'http://localhost:3000'
+    API_URL: 'https://parallelum.com.br/fipe/api/v1'
   }
 };
 
