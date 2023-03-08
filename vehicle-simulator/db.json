@@ -1,0 +1,32 @@
+{
+  "marcas": [
+    {
+        "nome": "Acura",
+        "codigo": "1"
+    },
+    {
+        "nome": "Agrale",
+        "codigo": "2"
+    },
+    {
+        "nome": "Alfa Romeo",
+        "codigo": "3"
+    }
+],
+
+  "modelos": [
+      {
+          "nome": "AMAROK CD2.0 16V\/S CD2.0 16V TDI 4x2 Die",
+          "codigo": 5585
+      },
+      {
+          "nome": "AMAROK CD2.0 16V\/S CD2.0 16V TDI 4x4 Die",
+          "codigo": 5586
+      },
+      {
+          "nome": "AMAROK Comfor. 3.0 V6 TDI 4x4 Dies. Aut.",
+          "codigo": 9895
+      }
+  ]
+
+}

@@ -1,3 +1,4 @@
+import { VendasCarrosService } from './services/vendas-carros.service';
 import { Component } from '@angular/core';
 
 @Component({
@@ -7,4 +8,8 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'vehicle-simulator';
+
+  constructor(private vendaCarros: VendasCarrosService){}
+
+
 }

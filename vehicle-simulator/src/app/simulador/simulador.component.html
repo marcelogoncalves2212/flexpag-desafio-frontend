@@ -2,57 +2,99 @@
   Simulador para venda de veículo
 </h1>
 <div class="d-flex justify-content-center flex-column">
-  <div class="container">
-    <div class="d-flex justify-content-between mb-3 gap-2" id="mod-style-select">
-      <div>
-        <span class="text-secondary">Tipo de veículo</span>
-        <select class="form-select bg-secondary text-white" aria-label="Default select example">
-          <option selected>Selecione o veiculo</option>
-          <option value="carros">Carros</option>
-          <option value="motos">Motos</option>
-          <option value="caminhoes">Caminhões</option>
-        </select>
-      </div>
+  <form #form="ngForm">
+    <div class="container">
+      <div
+        class="d-flex justify-content-between mb-3 gap-2"
+        id="mod-style-select"
+      >
+        <div>
+          <span class="text-secondary">Tipo de veículo</span>
+          <select
+            class="form-select bg-secondary text-white fw-bold"
+            name="tipoVeiculo"
+            [(ngModel)]="tipoVeiculo"
+            aria-label="Default select example"
+          >
+            <option
+              *ngFor="let modelo of modelos"
+              value="{{ modelo.name }}"
+              class="fw-bold"
+            >
+              {{ modelo.name | uppercase }}
+            </option>
+          </select>
+        </div>
 
-      <div>
-        <span class="text-secondary">Marca</span>
-        <select class="form-select bg-secondary text-white" aria-label="Default select example">
-          <option selected>Selecione a marca</option>
-          <option value="carros">Carros</option>
-          <option value="motos">Motos</option>
-          <option value="caminhoes">Caminhões</option>
-        </select>
-      </div>
+        <div>
+          <span class="text-secondary">Marca</span>
+          <select
+            name="tipoMarca"
+            [(ngModel)]="tipoMarca"
+            class="form-select bg-secondary text-white fw-bold"
+            aria-label="Default select example"
+          >
+            <option
+              *ngFor="let veiculo of veiculos"
+              value="{{ veiculo.nome }}"
+              class="fw-bold"
+            >
+              {{ veiculo.nome | uppercase }}
+            </option>
+          </select>
+        </div>
 
-      <div>
-        <span class="text-secondary">Modelo</span>
-        <select class="form-select bg-secondary text-white" aria-label="Default select example">
-          <option selected>Selecione o modelo</option>
-          <option value="carros">Carros</option>
-          <option value="motos">Motos</option>
-          <option value="caminhoes">Caminhões</option>
-        </select>
-      </div>
+        <div>
+          <span class="text-secondary">Modelo</span>
+          <select
+            name="tipoModeloMarca"
+            [(ngModel)]="tipoModeloMarca"
+            class="form-select bg-secondary text-white fw-bold"
+            aria-label="Default select example"
+          >
+            <option
+              *ngFor="let modelostipo of modelostipos"
+              value="{{ modelostipo.nome }}"
+              class="fw-bold"
+            >
+              {{ modelostipo.nome | uppercase }}
+            </option>
+          </select>
+        </div>
 
-      <div>
-        <span class="text-secondary">Ano</span>
-        <select class="form-select bg-secondary text-white" aria-label="Default select example">
-          <option selected>Selecione o ano</option>
-          <option value="carros">Carros</option>
-          <option value="motos">Motos</option>
-          <option value="caminhoes">Caminhões</option>
-        </select>
+        <div>
+          <span class="text-secondary">Ano</span>
+          <select
+            name="ano"
+            [(ngModel)]="ano"
+            class="form-select bg-secondary text-white fw-bold"
+            aria-label="Default select example"
+          >
+            <option
+              *ngFor="let AnoTipo of AnoTipos"
+              value="{{ AnoTipo.nome }}"
+              class="fw-bold"
+            >
+              {{ AnoTipo.nome | uppercase }}
+            </option>
+          </select>
+        </div>
       </div>
     </div>
-  </div>
 
     <div class="container">
       <span class="text-secondary">Valor da venda</span>
       <div class="flex-row d-flex justify-content-center d-grid gap-4">
-        <div class="input-group flex-nowrap ">
-          <span class="input-group-text fw-bold text-secondary" id="addon-wrapping">R$</span>
+        <div class="input-group flex-nowrap">
+          <span
+            class="input-group-text fw-bold text-secondary"
+            id="addon-wrapping"
+            >R$</span
+          >
           <input
             type="text"
+            name="valorVenda"
+            [(ngModel)]="valorVenda"
             class="form-control fw-bold"
             placeholder="Digite o valor da venda"
             aria-label="Username"
@@ -60,61 +102,107 @@
           />
         </div>
         <div class="d-grid col-4 mx-auto">
-          <button type="button" class="btn btn-info text-uppercase fw-bold text-white">Consultar</button>
+          <button
+            (click)="obterValorFipe()"
+            type="button"
+            class="btn btn-info text-uppercase fw-bold text-white"
+          >
+            Consultar
+          </button>
         </div>
       </div>
     </div>
-
+  </form>
 
   <div class="container mt-4">
-    <div class="row" style="margin-left: 10%; margin-right: 10%;">
-      <div class="col">
-        <div class="d-flex justify-content-between">
-          <span class="fw-bold text-secondary" >Marca:</span>
-          <p class="text-secondary">Vw - VollsWagen</p>
-        </div>
+    <ng-container *ngIf="valorVenda.length > 0">
+      <div class="row" style="margin-left: 10%; margin-right: 10%">
+        <div class="col">
+          <div class="d-flex justify-content-between">
+            <span class="fw-bold text-secondary">Marca:</span>
+            <p class="text-secondary">{{ result.Valor }}</p>
+          </div>
 
-        <div class="d-flex justify-content-between">
-          <span class="fw-bold text-secondary">Modelo:</span>
-          <p class="text-secondary">AMOROK hinh CD 2.0</p>
-        </div>
+          <div class="d-flex justify-content-between">
+            <span class="fw-bold text-secondary">Modelo:</span>
+            <div
+              style="
+                overflow: hidden;
+                width: 105px;
+                border: 1px;
+                white-space: nowrap;
+              "
+            >
+              <p class="text-secondary">{{ result.Modelo }}</p>
+            </div>
+          </div>
 
-        <div class="d-flex justify-content-between">
-          <span class="fw-bold text-secondary">Ano do modelo:</span>
-          <p class="text-secondary">2014</p>
-        </div>
+          <div class="d-flex justify-content-between">
+            <span class="fw-bold text-secondary">Ano do modelo:</span>
+            <p class="text-secondary">{{ result.AnoModelo }}</p>
+          </div>
 
-        <div class="d-flex justify-content-between">
-          <span class="fw-bold text-secondary">Código FIPE:</span>
-          <p class="text-secondary">055340-6</p>
-        </div>
+          <div class="d-flex justify-content-between">
+            <span class="fw-bold text-secondary">Código FIPE:</span>
+            <p class="text-secondary">{{ result.CodigoFipe }}</p>
+          </div>
 
-        <div class="d-flex justify-content-between">
-          <span class="fw-bold text-secondary">Mês referencia:</span>
-          <p class="text-secondary">01/2023</p>
+          <div class="d-flex justify-content-between">
+            <span class="fw-bold text-secondary">Mês referencia:</span>
+            <p maxlength="10" class="text-secondary">
+              01/{{ result.MesReferencia }}
+            </p>
+          </div>
+        </div>
+        <div class="col">
+          <div class="d-flex justify-content-between">
+            <span class="fw-bold text-secondary">Valor do veículo</span>
+            <p class="text-secondary">{{ valorVenda | currency : "BRL" }}</p>
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <span class="fw-bold text-secondary">Valor pela FIPE:</span>
+            <p class="text-secondary">{{ result.Valor }}</p>
+          </div>
+
+          <ng-container *ngIf="RESULT >= 10">
+            <div class="text-danger">
+              <span class="fw-bold m-0">Valor na média da tabela FIPE</span>
+              <h2 class="fw-bold m-0" style="font-size: 5rem">{{ RESULT }}%</h2>
+            </div>
+          </ng-container>
+
+          <ng-container *ngIf="RESULT <= -10">
+            <div class="text-success">
+              <span class="fw-bold m-0">Valor na média da tabela FIPE</span>
+              <h2 class="fw-bold m-0" style="font-size: 5rem">{{ RESULT }}%</h2>
+            </div>
+          </ng-container>
+
+          <!-- <ng-container>
+            <div class="text-warning">
+              <span class="fw-bold m-0">Valor na média da tabela FIPE</span>
+              <h2 class="fw-bold m-0" style="font-size: 5rem">{{ RESULT }}%</h2>
+            </div>
+          </ng-container> -->
         </div>
       </div>
-      <div class="col">
 
-        <div class="d-flex justify-content-between">
-          <span class="fw-bold text-secondary">Valor do veículo</span>
-          <p class="text-secondary">R$ 152.410,20</p>
+      <ng-container *ngIf="RESULT >= 10">
+        <div class="alert alert-danger mt-3" role="alert">
+          <h4 class="d-flex justify-content-center">Valor acima do mercado</h4>
         </div>
+      </ng-container>
 
-        <div class="d-flex justify-content-between">
-          <span class="fw-bold text-secondary">Valor pela FIPE:</span>
-          <p class="text-secondary">R$ 125.100,10</p>
+      <ng-container *ngIf="RESULT <= -10">
+        <div class="alert alert-success mt-3" role="alert">
+          <h4 class="d-flex justify-content-center">Valor abaixo do mercado</h4>
         </div>
+      </ng-container>
 
-        <div class="text-danger">
-          <span class="fw-bold m-0">Valor na média da tabela FIPE</span>
-          <h2 class="fw-bold m-0" style="font-size: 5rem">0.05%</h2>
-        </div>
-      </div>
-    </div>
-
-    <div class="alert alert-danger mt-3" role="alert">
-      <h4 class="d-flex justify-content-center">Valor de Mercado</h4>
-    </div>
+      <!-- <div class="alert alert-warning mt-3" role="alert">
+      <h4 class="d-flex justify-content-center">Valor de mercado</h4>
+    </div> -->
+    </ng-container>
   </div>
 </div>
