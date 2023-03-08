@@ -10,3 +10,7 @@ body {
   display: flex;
   justify-content: center;
 }
+
+.form-select:disabled {
+  opacity: 0.5;
+}

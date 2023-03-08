@@ -3,3 +3,8 @@ export interface IModelVeiculo {
   motos: string;
   caminhoes: string;
 }
+
+export interface IMarca {
+  nome: string;
+  codigo: string;
+}

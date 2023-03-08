@@ -26,7 +26,6 @@
             </option>
           </select>
         </div>
-
         <div>
           <span class="text-secondary">Marca</span>
           <select
@@ -34,14 +33,17 @@
             [(ngModel)]="tipoMarca"
             class="form-select bg-secondary text-white fw-bold"
             aria-label="Default select example"
+            (change)="onChangeTipoMarca()"
           >
-            <option
-              *ngFor="let veiculo of veiculos"
-              value="{{ veiculo.nome }}"
-              class="fw-bold"
-            >
-              {{ veiculo.nome | uppercase }}
-            </option>
+            <ng-container *ngIf="marcas$ | async; let marcas">
+              <option
+                *ngFor="let marca of marcas"
+                [value]="marca.codigo"
+                class="fw-bold"
+              >
+                {{ marca.nome | uppercase }}
+              </option>
+            </ng-container>
           </select>
         </div>
 
@@ -52,14 +54,17 @@
             [(ngModel)]="tipoModeloMarca"
             class="form-select bg-secondary text-white fw-bold"
             aria-label="Default select example"
+            [disabled]="!tipoMarca"
           >
-            <option
-              *ngFor="let modelostipo of modelostipos"
-              value="{{ modelostipo.nome }}"
-              class="fw-bold"
-            >
-              {{ modelostipo.nome | uppercase }}
-            </option>
+            <ng-container *ngIf="modelos$ | async; let modelos">
+              <option
+                *ngFor="let modelo of modelos"
+                [value]="modelo"
+                class="fw-bold"
+              >
+                {{ modelo.nome | uppercase }}
+              </option>
+            </ng-container>
           </select>
         </div>
 
@@ -70,6 +75,7 @@
             [(ngModel)]="ano"
             class="form-select bg-secondary text-white fw-bold"
             aria-label="Default select example"
+            [disabled]="!tipoModeloMarca"
           >
             <option
               *ngFor="let AnoTipo of AnoTipos"
@@ -93,7 +99,7 @@
             >R$</span
           >
           <input
-            type="text"
+            type="number"
             name="valorVenda"
             [(ngModel)]="valorVenda"
             class="form-control fw-bold"
@@ -107,6 +113,7 @@
             (click)="obterValorFipe()"
             type="button"
             class="btn btn-info text-uppercase fw-bold text-white"
+            [disabled]="!ano || !valorVenda"
           >
             Consultar
           </button>
@@ -116,7 +123,7 @@
   </form>
 
   <div class="container mt-4">
-    <ng-container *ngIf="result && valorVenda.length > 0">
+    <ng-container *ngIf="result && valorVenda && ano">
       <div class="row" style="margin-left: 10%; margin-right: 10%">
         <div class="col">
           <div class="d-flex justify-content-between">
@@ -166,45 +173,22 @@
             <p class="text-secondary">{{ result.Valor }}</p>
           </div>
 
-          <ng-container *ngIf="RESULT >= 10">
-            <div class="text-danger">
-              <span class="fw-bold m-0">Valor na média da tabela FIPE</span>
-              <h2 class="fw-bold m-0" style="font-size: 5rem">{{ RESULT }}%</h2>
-            </div>
-          </ng-container>
-
-          <ng-container *ngIf="RESULT <= -10">
-            <div class="text-success">
-              <span class="fw-bold m-0">Valor na média da tabela FIPE</span>
-              <h2 class="fw-bold m-0" style="font-size: 5rem">{{ RESULT }}%</h2>
-            </div>
-          </ng-container>
-
-          <!-- <ng-container>
-            <div class="text-warning">
-              <span class="fw-bold m-0">Valor na média da tabela FIPE</span>
-              <h2 class="fw-bold m-0" style="font-size: 5rem">{{ RESULT }}%</h2>
-            </div>
-          </ng-container> -->
-
+          <div [ngClass]="classFromPercentual.percent">
+            <span class="fw-bold m-0">Valor na média da tabela FIPE</span>
+            <h2 class="fw-bold m-0" style="font-size: 5rem">
+              {{ percentual }}%
+            </h2>
+          </div>
         </div>
       </div>
 
-      <ng-container *ngIf="RESULT >= 10">
-        <div class="alert alert-danger mt-3" role="alert">
-          <h4 class="d-flex justify-content-center">Valor acima do mercado</h4>
-        </div>
-      </ng-container>
-
-      <ng-container *ngIf="RESULT <= -10">
-        <div class="alert alert-success mt-3" role="alert">
-          <h4 class="d-flex justify-content-center">Valor abaixo do mercado</h4>
-        </div>
-      </ng-container>
-
-      <!-- <div class="alert alert-warning mt-3" role="alert">
-      <h4 class="d-flex justify-content-center">Valor de mercado</h4>
-    </div> -->
+      <div
+        class="alert mt-3"
+        [ngClass]="classFromPercentual.alert"
+        role="alert"
+      >
+        <h4 class="d-flex justify-content-center">Valor de mercado</h4>
+      </div>
     </ng-container>
   </div>
 </div>
