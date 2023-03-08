@@ -1,0 +1,194 @@
+<h1 class="d-flex justify-content-center mb-4 mt-4">
+  Simulador para venda de veículo
+</h1>
+<div class="d-flex justify-content-center flex-column">
+  <form #form="ngForm">
+    <div class="container">
+      <div
+        class="d-flex justify-content-between mb-3 gap-2"
+        id="mod-style-select"
+      >
+        <div>
+          <span class="text-secondary">Tipo de veículo</span>
+          <select
+            class="form-select bg-secondary text-white fw-bold"
+            name="tipoVeiculo"
+            [(ngModel)]="tipoVeiculo"
+            aria-label="Default select example"
+            (change)="onChangeTipoVeiculo()"
+          >
+            <option
+              *ngFor="let modelo of modelos"
+              value="{{ modelo.name }}"
+              class="fw-bold"
+            >
+              {{ modelo.name | uppercase }}
+            </option>
+          </select>
+        </div>
+        <div>
+          <span class="text-secondary">Marca</span>
+          <select
+            name="tipoMarca"
+            [(ngModel)]="tipoMarca"
+            class="form-select bg-secondary text-white fw-bold"
+            aria-label="Default select example"
+            (change)="onChangeTipoMarca()"
+          >
+            <ng-container *ngIf="marcas$ | async; let marcas">
+              <option
+                *ngFor="let marca of marcas"
+                [value]="marca.codigo"
+                class="fw-bold"
+              >
+                {{ marca.nome | uppercase }}
+              </option>
+            </ng-container>
+          </select>
+        </div>
+
+        <div>
+          <span class="text-secondary">Modelo</span>
+          <select
+            name="tipoModeloMarca"
+            [(ngModel)]="tipoModeloMarca"
+            class="form-select bg-secondary text-white fw-bold"
+            aria-label="Default select example"
+            [disabled]="!tipoMarca"
+          >
+            <ng-container *ngIf="modelos$ | async; let modelos">
+              <option
+                *ngFor="let modelo of modelos"
+                [value]="modelo"
+                class="fw-bold"
+              >
+                {{ modelo.nome | uppercase }}
+              </option>
+            </ng-container>
+          </select>
+        </div>
+
+        <div>
+          <span class="text-secondary">Ano</span>
+          <select
+            name="ano"
+            [(ngModel)]="ano"
+            class="form-select bg-secondary text-white fw-bold"
+            aria-label="Default select example"
+            [disabled]="!tipoModeloMarca"
+          >
+            <option
+              *ngFor="let AnoTipo of AnoTipos"
+              value="{{ AnoTipo.nome }}"
+              class="fw-bold"
+            >
+              {{ AnoTipo.nome | uppercase }}
+            </option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <span class="text-secondary">Valor da venda</span>
+      <div class="flex-row d-flex justify-content-center d-grid gap-4">
+        <div class="input-group flex-nowrap">
+          <span
+            class="input-group-text fw-bold text-secondary"
+            id="addon-wrapping"
+            >R$</span
+          >
+          <input
+            type="number"
+            name="valorVenda"
+            [(ngModel)]="valorVenda"
+            class="form-control fw-bold"
+            placeholder="Digite o valor da venda"
+            aria-label="Username"
+            aria-describedby="addon-wrapping"
+          />
+        </div>
+        <div class="d-grid col-4 mx-auto">
+          <button
+            (click)="obterValorFipe()"
+            type="button"
+            class="btn btn-info text-uppercase fw-bold text-white"
+            [disabled]="!ano || !valorVenda"
+          >
+            Consultar
+          </button>
+        </div>
+      </div>
+    </div>
+  </form>
+
+  <div class="container mt-4">
+    <ng-container *ngIf="result && valorVenda && ano">
+      <div class="row" style="margin-left: 10%; margin-right: 10%">
+        <div class="col">
+          <div class="d-flex justify-content-between">
+            <span class="fw-bold text-secondary">Marca:</span>
+            <p class="text-secondary">{{ result.Marca }}</p>
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <span class="fw-bold text-secondary">Modelo:</span>
+            <div
+              style="
+                overflow: hidden;
+                width: 105px;
+                border: 1px;
+                white-space: nowrap;
+              "
+            >
+              <p class="text-secondary">{{ result.Modelo }}</p>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <span class="fw-bold text-secondary">Ano do modelo:</span>
+            <p class="text-secondary">{{ result.AnoModelo }}</p>
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <span class="fw-bold text-secondary">Código FIPE:</span>
+            <p class="text-secondary">{{ result.CodigoFipe }}</p>
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <span class="fw-bold text-secondary">Mês referencia:</span>
+            <p maxlength="10" class="text-secondary">
+              01/{{ result.MesReferencia }}
+            </p>
+          </div>
+        </div>
+        <div class="col">
+          <div class="d-flex justify-content-between">
+            <span class="fw-bold text-secondary">Valor do veículo</span>
+            <p class="text-secondary">{{ valorVenda | currency : "BRL" }}</p>
+          </div>
+
+          <div class="d-flex justify-content-between">
+            <span class="fw-bold text-secondary">Valor pela FIPE:</span>
+            <p class="text-secondary">{{ result.Valor }}</p>
+          </div>
+
+          <div [ngClass]="classFromPercentual.percent">
+            <span class="fw-bold m-0">Valor na média da tabela FIPE</span>
+            <h2 class="fw-bold m-0" style="font-size: 5rem">
+              {{ percentual }}%
+            </h2>
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="alert mt-3"
+        [ngClass]="classFromPercentual.alert"
+        role="alert"
+      >
+        <h4 class="d-flex justify-content-center">Valor de mercado</h4>
+      </div>
+    </ng-container>
+  </div>
+</div>
