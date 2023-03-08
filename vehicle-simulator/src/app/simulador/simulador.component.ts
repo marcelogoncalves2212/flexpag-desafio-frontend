@@ -54,6 +54,8 @@ export class SimuladorComponent implements OnInit {
     this.valorVenda;
   }
 
+  // Função do resultado final
+
   obterValorFipe() {
     this.result = {
       Valor: 'R$ 125.318,00',
@@ -75,13 +77,17 @@ export class SimuladorComponent implements OnInit {
         .trim()
     );
 
-    // calculo pra porcetagem
+  // calculo pra porcetagem
     this.percentual = Math.round(((this.VVD - this.VVF) / this.VVF) * 100);
+    console.log("🚀 ~ file: simulador.component.ts:82 ~ SimuladorComponent ~ obterValorFipe ~ this.percentual:", this.percentual)
   }
 
+  // Função que receber o valor do select de marcas
   onChangeTipoVeiculo() {
     this.getMarcas();
   }
+
+  // Função que receber o valor do select de Modelos
 
   onChangeTipoMarca() {
     this.getModelos();
